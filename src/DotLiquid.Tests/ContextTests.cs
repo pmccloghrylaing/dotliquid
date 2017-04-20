@@ -227,6 +227,26 @@ namespace DotLiquid.Tests
                 RethrowErrors = true
             }));
         }
+ 
+        [Test]
+        public void TestVariableFalsyInIfIgnored()
+        {
+            Template template = Template.Parse("{% if first.test %}abc{% endif %}");
+            string rendered = template.Render(Hash.FromAnonymousObject(new { second = new { foo = "hi!" } }));
+ 
+            Assert.AreEqual("", rendered);
+            Assert.AreEqual(0, template.Errors.Count);
+        }
+ 
+        [Test]
+        public void TestVariableFalsyInUnlessIgnored()
+        {
+            Template template = Template.Parse("{% unless first.test %}abc{% endunless %}");
+            string rendered = template.Render(Hash.FromAnonymousObject(new { second = new { foo = "hi!" } }));
+ 
+            Assert.AreEqual("abc", rendered);
+            Assert.AreEqual(0, template.Errors.Count);
+        }
 
         [Test]
         public void TestScoping()
